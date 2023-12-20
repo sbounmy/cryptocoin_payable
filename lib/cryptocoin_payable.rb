@@ -6,7 +6,19 @@ if defined?(Rails)
     class Railtie < Rails::Railtie
       initializer 'cryptocoin_payable.active_record' do
         ActiveSupport.on_load(:active_record) do
-          require 'cryptocoin_payable/orm/activerecord'
+            require 'cryptocoin_payable/orm/activerecord'
+        end
+      end
+
+      initializer 'cryptocoin_payable.active_storage', after: 'active_storage.reflection' do
+        require 'cryptocoin_payable/coin_payment'
+        config.after_initialize do
+          if CryptocoinPayable.configuration.qrcode?
+            require 'rqrcode'
+            require 'image_processing/vips'
+            require 'cryptocoin_payable/qr_codes'
+            CryptocoinPayable::CoinPayment.has_one_attached(:qrcode)
+          end
         end
       end
 
