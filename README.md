@@ -259,6 +259,39 @@ coin_payment.transactions.find_each do |transaction|
 end
 ```
 
+### QRCode generation
+
+Only supports bitcoin using BIP-21 at the moment
+```rb
+
+# initializers/cryptocoin_payable.rb
+require 'chunky_png'
+
+CryptocoinPayable.configure do |config|
+  config.qrcode = { bit_depth: 1,
+                      border_modules: 4,
+                      color_mode: ChunkyPNG::COLOR_GRAYSCALE,
+                      color: 'black',
+                      file: nil,
+                      fill: 'white',
+                      module_px_size: 6,
+                      resize_exactly_to: false,
+                      resize_gte_to: false,
+                      size: 1200 }
+end
+```
+
+or if you dont want qrcode generation
+
+```rb
+config.qrcode = nil 
+```
+
+Display the qrcode 
+```rb
+<%= image_tag coin_payment.qrcode, width: 250 %>
+```
+
 ## Contributing
 
 1. Fork it
