@@ -92,6 +92,10 @@ module CryptocoinPayable
       @coin_conversion ||= CurrencyConversion.where(coin_type: coin_type).last.price
     end
 
+    def expired_at
+      created_at&.+(CryptocoinPayable.configuration.expire_payments_after)
+    end
+
     def update_coin_amount_due(rate: coin_conversion)
       update!(
         coin_amount_due: calculate_coin_amount_due,
