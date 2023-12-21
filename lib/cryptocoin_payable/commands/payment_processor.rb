@@ -98,8 +98,7 @@ module CryptocoinPayable
     end
 
     def update_payment_expired_state(payment)
-      expire_after = CryptocoinPayable.configuration.expire_payments_after
-      payment.expire if expire_after.present? && (Time.now - payment.created_at) >= expire_after
+      payment.expire if payment.expired_at&.past?
     end
   end
 end

@@ -40,5 +40,18 @@ describe CryptocoinPayable::CoinPayment do
       expect(subject.qrcode.url).to match /#{subject.address}\.png$/
       puts subject.qrcode.url.inspect
     end
+
+    it 'expired_at can be changed' do
+      subject.save
+      expect {
+        CryptocoinPayable.configuration.expire_payments_after = 30.minutes
+      }.to change { subject.expired_at }.by(15.minutes)
+    end
+
+    it 'expired_at fails gracefully when unsaved' do
+      expect {
+        CryptocoinPayable.configuration.expire_payments_after = 30.minutes
+      }.to_not change { subject.expired_at }.from(nil)
+    end
   end
 end
