@@ -35,6 +35,7 @@ module CryptocoinPayable
 
       after_transition on: :pay, do: :notify_payable_paid
       after_transition on: :comp, do: :notify_payable_paid
+      after_transition on: :partially_pay, do: :notify_payable_partially_paid
       after_transition on: :confirm, do: :notify_payable_confirmed
       after_transition on: :expire, do: :notify_payable_expired
 
@@ -134,6 +135,10 @@ module CryptocoinPayable
 
     def notify_payable_paid
       notify_payable_event(:paid)
+    end
+
+    def notify_payable_partially_paid
+      notify_payable_event(:partially_paid)
     end
 
     def notify_payable_confirmed

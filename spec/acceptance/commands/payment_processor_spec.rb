@@ -62,5 +62,15 @@ describe CryptocoinPayable::PaymentProcessor do
       expect(payment.transactions.size).to eq(10)
       expect(payment.transactions.last.confirmations).to eq(10)
     end
+
+    it 'notifies on partial payment' do
+      allow(adapter).to receive(:fetch_transactions) { build_fake_transactions_data(count: 300) }
+
+      payment = create_payment
+      payment.update price: 9999
+      expect(payment.payable).to receive(:coin_payment_partially_paid)
+      CryptocoinPayable::PaymentProcessor.perform
+    end
+
   end
 end

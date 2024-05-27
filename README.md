@@ -192,7 +192,7 @@ rake cryptocoin_payable:process_payments
 
 ### Notify your application when a payment is made
 
-Use the `coin_payment_paid` and `coin_payment_confirmed` methods
+Use the `coin_payment_partially_paid`, `coin_payment_paid` and `coin_payment_confirmed` methods
 
 ```rb
 def Product < ActiveRecord::Base
@@ -205,6 +205,11 @@ def Product < ActiveRecord::Base
   # Runs when the payment is first detected on the network.
   def coin_payment_paid(payment)
     self.notify!
+  end
+
+  # Runs when the payment is partially paid
+  def coin_payment_partially_paid(payment)
+    self.awaiting_full_payment!
   end
 
   # Runs when enough confirmations have occurred.
