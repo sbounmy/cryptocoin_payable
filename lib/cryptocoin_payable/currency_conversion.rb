@@ -3,7 +3,7 @@ module CryptocoinPayable
     validates :price, presence: true
 
     # TODO: Duplicated in `CoinPayment`.
-    enum coin_type: %i[
+    enum :coin_type, %i[
       btc
       eth
       bch
